@@ -11,11 +11,25 @@ var rectangle = [
     {x: 0, y: 100}
 ];
 
-function transform(points, tx, ty, sx, sy) {
+function transform(points, tx, ty, sx, sy, angle) {
+    let rad = angle * Math.PI / 180;
+
+    let cx = 50;
+    let cy = 50;
+
     return points.map(p => {
+        let x = p.x - cx;
+        let y = p.y - cy;
+
+        x *= sx;
+        y *= sy;
+
+        let xRot = x * Math.cos(rad) - y * Math.sin(rad);
+        let yRot = x * Math.sin(rad) + y * Math.cos(rad);
+
         return {
-            x: p.x * sx + (tx * 50),
-            y: p.y * sy + (ty * 50)
+            x: xRot + cx + (tx * 50),
+            y: yRot + cy + (ty * 50)
         };
     });
 }
@@ -75,8 +89,9 @@ function draw() {
     var ty = parseFloat(document.getElementById('ty').value);
     var sx = parseFloat(document.getElementById('sx').value);
     var sy = parseFloat(document.getElementById('sy').value);
+    var angle = parseFloat(document.getElementById('angle').value);
 
-    var transformed = transform(rectangle, tx, ty, sx, sy);
+    var transformed = transform(rectangle, tx, ty, sx, sy, angle);
 
     drawShape(transformed);
 }
